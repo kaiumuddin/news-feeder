@@ -1,28 +1,26 @@
+import { useContext } from "react";
+import { CategoryContext } from "../../context";
+
 export default function Categories() {
+    const { categories, selectedCategory, setSelectedCategory } =
+        useContext(CategoryContext);
     return (
         <div className="container mx-auto mt-6">
             <ul className="flex flex-wrap items-center justify-center gap-5 text-xs font-semibold lg:text-base">
-                <li>
-                    <a href="#">General</a>
-                </li>
-                <li>
-                    <a href="#">Business</a>
-                </li>
-                <li>
-                    <a href="#">Entertainment</a>
-                </li>
-                <li>
-                    <a href="#">Health</a>
-                </li>
-                <li>
-                    <a href="#">Science</a>
-                </li>
-                <li>
-                    <a href="#">Sports</a>
-                </li>
-                <li>
-                    <a href="#">Technology</a>
-                </li>
+                {categories.map((cat) => {
+                    return (
+                        <li key={cat}>
+                            <a
+                                className={`capitalize cursor-pointer underline-offset-4 ${
+                                    selectedCategory === cat ? "underline" : ""
+                                }`}
+                                onClick={() => setSelectedCategory(cat)}
+                            >
+                                {cat}
+                            </a>
+                        </li>
+                    );
+                })}
             </ul>
         </div>
     );
