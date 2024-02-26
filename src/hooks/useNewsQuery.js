@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { CategoryContext } from "../context";
+import { CategoryContext, SearchContext } from "../context";
 
 const useNewsQuery = () => {
     const [error, setError] = useState(null);
@@ -8,9 +8,11 @@ const useNewsQuery = () => {
         message: "",
     });
     const [newsData, setNewsData] = useState([]);
-    const { selectedCategory } = useContext(CategoryContext);
+    const { selectedCategory, setSelectedCategory } =
+        useContext(CategoryContext);
+    const { searchTerm, setSearchTerm } = useContext(SearchContext);
 
-    const fetchNewsData = async (selectedCategory) => {
+    const fetchNewsData = async (category) => {
         try {
             setLoading({
                 ...loading,
@@ -18,7 +20,7 @@ const useNewsQuery = () => {
                 message: "Fething news data...",
             });
 
-            const url = `http://localhost:8000/v2/top-headlines?category=${selectedCategory}`;
+            const url = `http://localhost:8000/v2/top-headlines?category=${category}`;
             const response = await fetch(url);
             if (!response.ok) {
                 const errorMessage = `Fetching news data failed: ${response.status}`;
@@ -38,9 +40,43 @@ const useNewsQuery = () => {
         }
     };
 
+    const fetchSearchNewsData = async (term) => {
+        try {
+            setLoading({
+                ...loading,
+                state: true,
+                message: "Fething news data...",
+            });
+
+            const url = `http://localhost:8000/v2/search?q=${term}`;
+            const response = await fetch(url);
+            if (!response.ok) {
+                const errorMessage = `Fetching news data failed: ${response.status}`;
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            setNewsData(data.result);
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading({
+                ...loading,
+                state: false,
+                message: "",
+            });
+        }
+    };
+
     useEffect(() => {
         fetchNewsData(selectedCategory);
     }, [selectedCategory]);
+
+    useEffect(() => {
+        if (searchTerm !== "") {
+            fetchSearchNewsData(searchTerm);
+        }
+    }, [searchTerm]);
 
     return { error, loading, newsData };
 };
