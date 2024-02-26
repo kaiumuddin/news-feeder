@@ -75,6 +75,8 @@ const useNewsQuery = () => {
     useEffect(() => {
         if (searchTerm !== "") {
             fetchSearchNewsData(searchTerm);
+        } else {
+            fetchNewsData(selectedCategory);
         }
     }, [searchTerm]);
 
