@@ -8,9 +8,10 @@ import { formatDate } from "../../utils/format-date";
 
 export default function Left() {
     const { newsData } = useContext(NewsContext);
-    let news = newsData.slice(0, newsData.length / 2);
+    let news = newsData?.slice(0, 100);
+    news = newsData?.slice(0, newsData.length / 2);
     news = zeroMover(news);
-    news = news.map((news) => {
+    news = news?.map((news) => {
         return {
             ...news,
             publishedAt: formatDate(news.publishedAt),
@@ -19,7 +20,7 @@ export default function Left() {
 
     return (
         <div className="col-span-12 grid grid-cols-12 gap-6 self-start xl:col-span-8">
-            {news.map((news, index) => {
+            {news?.map((news, index) => {
                 if (index === 0) {
                     return <LeftFirstItem key={index} news={news} />;
                 }

@@ -2,7 +2,7 @@ export function zeroMover(arr) {
     let nonZeroIndex = 0;
 
     // Iterate through the array
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr?.length; i++) {
         // If the current element is non-zero
         if (
             arr[i].title !== null &&

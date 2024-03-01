@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { CategoryContext, SearchContext } from "../context";
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 
 const useNewsQuery = () => {
     const [error, setError] = useState(null);
@@ -20,7 +21,9 @@ const useNewsQuery = () => {
                 message: "Fething news data...",
             });
 
-            const url = `http://localhost:8000/v2/top-headlines?category=${category}`;
+            const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`;
+
+            // const url = `http://localhost:8000/v2/top-headlines?category=${category}`;
             const response = await fetch(url);
             if (!response.ok) {
                 const errorMessage = `Fetching news data failed: ${response.status}`;
@@ -28,7 +31,7 @@ const useNewsQuery = () => {
             }
 
             const data = await response.json();
-            setNewsData(data.articles);
+            setNewsData([...data.articles]);
         } catch (error) {
             setError(error);
         } finally {
@@ -48,7 +51,8 @@ const useNewsQuery = () => {
                 message: "Fething news data...",
             });
 
-            const url = `http://localhost:8000/v2/search?q=${term}`;
+            const url = `https://newsapi.org/v2/everything?q=${term}&apiKey=${API_KEY}`;
+            // const url = `http://localhost:8000/v2/search?q=${term}`;
             const response = await fetch(url);
             if (!response.ok) {
                 const errorMessage = `Fetching news data failed: ${response.status}`;
@@ -56,7 +60,7 @@ const useNewsQuery = () => {
             }
 
             const data = await response.json();
-            setNewsData(data.result);
+            setNewsData([...data.articles]);
         } catch (error) {
             setError(error);
         } finally {

@@ -7,9 +7,10 @@ import { formatDate } from "../../utils/format-date";
 
 export default function Right() {
     const { newsData } = useContext(NewsContext);
-    let news = newsData.slice(newsData.length / 2, newsData.length);
+    let news = newsData?.slice(0, 100);
+    news = newsData?.slice(newsData.length / 2, newsData.length);
     news = zeroMover(news);
-    news = news.map((news) => {
+    news = news?.map((news) => {
         return {
             ...news,
             publishedAt: formatDate(news.publishedAt),
@@ -19,7 +20,7 @@ export default function Right() {
     return (
         <div className="col-span-12 self-start xl:col-span-4">
             <div className="space-y-6 divide-y-2 divide-[#D5D1C9]">
-                {news.map((news, index) => {
+                {news?.map((news, index) => {
                     if (index === 0) {
                         return <RightFirst key={index} news={news} />;
                     }
